@@ -1,4 +1,4 @@
-package pl.edu.pk.student.snake4d;
+package pl.edu.pk.student.snake4d.tmp;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
