@@ -1,4 +1,4 @@
-package pl.edu.pk.student.snake4d;
+package pl.edu.pk.student.snake4d.processors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

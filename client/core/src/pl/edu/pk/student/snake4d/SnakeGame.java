@@ -2,30 +2,20 @@ package pl.edu.pk.student.snake4d;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.*;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.GLFrameBuffer;
+import pl.edu.pk.student.snake4d.processors.ArcballCameraInputController;
 
 public class SnakeGame extends ApplicationAdapter {
     public PerspectiveCamera cam;
-    public ArcballCameraInputController camController;
-    public Environment env1;
-    public Environment env2;
-    public Environment env3;
-    public Model cube1;
-    public Model cube2;
-    public Model cube3;
-    public ModelInstance cubeInstance1;
-    public ModelInstance cubeInstance2;
-    public ModelInstance cubeInstance3;
+    public Environment environment;
     public ModelBatch modelBatch;
-    public FrameBuffer frameBuffer;
 
     @Override
     public void create() {
@@ -52,7 +42,10 @@ public class SnakeGame extends ApplicationAdapter {
 
         camController = new ArcballCameraInputController(cam);
         // camController.setInvertedControls(true);
-        Gdx.input.setInputProcessor(camController);
+
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(camController);
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         ModelBuilder modelBuilder = new ModelBuilder();
 
@@ -65,7 +58,10 @@ public class SnakeGame extends ApplicationAdapter {
 
         cube2 = modelBuilder.createBox(
                 1f, 1f, 1f,
-                new Material(ColorAttribute.createDiffuse(new Color(0, 0, 1, 0.5f))),
+                new Material(
+                        ColorAttribute.createDiffuse(new Color(0, 0, 1, 0.2f)),
+                        new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
+                ),
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal
         );
         cubeInstance2 = new ModelInstance(cube2);
@@ -73,7 +69,10 @@ public class SnakeGame extends ApplicationAdapter {
 
         cube3 = modelBuilder.createBox(
                 1f, 1f, 1f,
-                new Material(ColorAttribute.createDiffuse(Color.GOLD)),
+                new Material(
+                        ColorAttribute.createDiffuse(new Color(1, 1, 0, 0.3f)),
+                        new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
+                ),
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal
         );
         cubeInstance3 = new ModelInstance(cube3);
@@ -96,6 +95,7 @@ public class SnakeGame extends ApplicationAdapter {
 
     @Override
     public void render() {
+
         camController.update();
 
         // frameBuffer.begin();
@@ -109,8 +109,11 @@ public class SnakeGame extends ApplicationAdapter {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
-        // planeInstance.materials.get(0).set(TextureAttribute.createDiffuse(frameBuffer.getColorBufferTexture()));
 
+        Gdx.gl20.glEnable(GL20.GL_BLEND);
+        Gdx.gl20.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        Gdx.gl20.glEnable(GL20.GL_TEXTURE_2D);
+        Gdx.gl20.glBlendEquation(GL20.GL_BLEND);
 
         modelBatch.begin(cam);
         modelBatch.render(cubeInstance1, env1);

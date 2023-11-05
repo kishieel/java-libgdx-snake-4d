@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.GLFrameBuffer;
+import pl.edu.pk.student.snake4d.processors.ArcballCameraInputController;
 
 public class Attempt1 extends ApplicationAdapter {
     public PerspectiveCamera cam;
